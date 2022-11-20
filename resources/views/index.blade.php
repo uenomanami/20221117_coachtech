@@ -93,7 +93,14 @@
         <input type="submit" value="追加" class="todolist__item-addbtn">
       </div>
       </form>
-    <div class="todolist__item">
+      @if (count($errors) > 0)
+      <ul>
+      @foreach ($errors->all() as $error)
+      <li>{{$error}}</li>
+      @endforeach
+      </ul>
+      @endif
+      <div class="todolist__item">
 
     <table>
       <tr>
