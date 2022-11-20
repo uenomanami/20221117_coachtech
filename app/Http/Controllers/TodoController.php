@@ -14,6 +14,11 @@ class TodoController extends Controller
         return view('index', ['todos' => $todos]);
     }
 
+    public function post(Request $request)
+    {
+        return view('index');
+    }
+
     public function add(TodoRequest $request)
     {
         $form = $request->all();
