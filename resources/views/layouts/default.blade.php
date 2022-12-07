@@ -78,17 +78,17 @@
         <th>更新</th>
         <th>削除</th>
       </tr>
-      @foreach ($todos as $todo)
-      <form action="{{ route('todo.update', ['id' => $todo->id ])}}" method="post">
-      @csrf
+      @if (@isset($todos))
+        @foreach ($todos as $todo)
+        <form action="{{ route('todo.update', ['id' => $todo->id ])}}" method="post">
+        @csrf
         <tr>
           <td>{{$todo->created_at}}</td>
           <td><input type="text" name="content" value="{{ $todo->content }}" class="todolist__item-edit"></td>
           <td>
-            <select name="tags" class="todolist__item-tag">
-              <option value="{{ $todo->tag_id }}">{{ $todo->getTagName() }}</option>
+            <select name="tag_id" class="todolist__item-tag">
               @foreach ($tags as $tag)
-                <option value="{{ $tag->id }}">{{ $tag->content }}</option>
+                <option value="{{ $tag->id }}" @if( $todo->tag_id == $tag->id ) selected @endif>{{ $tag->content }}</option>
               @endforeach
             </select>
           </td>
@@ -100,6 +100,7 @@
         </tr>
       </form>
       @endforeach
+      @endif
     </table>
 
     </div>

@@ -16,4 +16,8 @@ class Tag extends Model
     protected $fillable = [
         'content'
     ];
+
+    public function tags(){
+        return $this->hasMany('App\Models\Todo');
+    }
 }

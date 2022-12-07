@@ -38,13 +38,13 @@
     margin-bottom: 10px;
   }
 
-  .todolist__item-add {
+  .todolist__item-search {
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
   
-  .todolist__item-addcontent{
+  .todolist__item-searchcontent{
     border: 1px solid lightgray;
     height: 36px;
     width: 75%;
@@ -54,7 +54,7 @@
   .todolist__item-tag {
     
   }
-  .todolist__item-addbtn{
+  .todolist__item-searchbtn{
     background-color: white;
     font-weight: bold;
     border-radius: 5px;
@@ -64,7 +64,7 @@
     font-size: 14px;
   }
 
-  .todolist__item-addbtn{
+  .todolist__item-searchbtn{
     color: rgb(219,117,247);
     border: 2px solid rgb(219,117,247);
   }
@@ -74,7 +74,7 @@
   @section('content')
     <div class="todolist__ttl">
       <div>
-        <h1>Todo List</h1>
+        <h1> Todo検索</h1>
       </div>
       <div class="todolist__login">
         @if (Auth::check())
@@ -83,22 +83,21 @@
           <a href="/register" class="todolist__item-logoutbtn">ログアウト</a>
       </div>
     </div>
-      <a href="/search" class="todolist__item-tagbtn">タスク検索</a>
         @if (Auth::check())
 
-      <form action="{{ route('todo.add', ['user_id' => $user->id ])}}" method="post">
+      <form action="/search/find" method="get">
       @endif
 
     @csrf
-      <div class="todolist__item-add">
-        <input type="text" name="content" class="todolist__item-addcontent" >
+      <div class="todolist__item-search">
+        <input type="text" name="content" class="todolist__item-searchcontent" >
         <select name="tag_id" class="todolist__item-tag">
           <option value=""></option>
           @foreach ($tags as $tag)
-            <option value="{{ $tag->id }}">{{ $tag->content }}</option>
+          <option value="{{ $tag->id }}">{{ $tag->content }}</option>
           @endforeach
         </select>
-        <input type="submit" value="追加" class="todolist__item-addbtn">
+        <input type="submit" value="検索" class="todolist__item-searchbtn">
       </div>
       </form>
       @if (count($errors) > 0)

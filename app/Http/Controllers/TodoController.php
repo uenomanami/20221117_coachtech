@@ -26,12 +26,8 @@ class TodoController extends Controller
 
     public function add(TodoRequest $request)
     {
-        $user = Auth::user();
-        // $form = $request->input('tag_id');
         $form = $request->all();
-        $param = ['form' => $form, 'user' => $user];
-        // return $form.$user;
-        Todo::create($param);
+        Todo::create($form);
         return redirect('/home');
     }
 
@@ -50,11 +46,38 @@ class TodoController extends Controller
         return redirect('/home');
     }
 
-    public function search(Request $request)
+    public function search()
     {
-        $tag = $request->tags;
-        $content = $request->content;
-        Todo::where('tag', $tag);
-        return redirect('/todo');
+        $user = Auth::user();
+        $tags = Tag::all();
+        $param = ['user' => $user, 'tags' => $tags];
+
+        return view('search', $param);
+    }
+
+    public function find(Request $request)
+    {
+        $request_content = $request->input('content');
+        $request_tag = $request->input('tag_id');
+
+        $query = Todo::query();
+        //テーブル結合
+        $query->join('tags', function ($query) use ($request) {
+            $query->on('todos.tag_id', '=', 'tags.id');
+            });
+
+        if(!empty($request_content)) {
+            $query->where('content', 'LIKE', "%{$request_content}%");
+        }
+        if(!empty($request_tag)) {
+            $query->where('tag_id', 'LIKE', $request_tag);
+        }
+
+        $todos = $query->get();
+
+        $user = Auth::user();
+        $tags = Tag::all();
+
+        return view('search', compact('todos',  'user', 'tags'));
     }
 }
