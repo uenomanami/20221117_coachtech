@@ -9,5 +9,19 @@ class Todo extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['content'];
+    protected $guarded = array('id');
+    protected $fillable = ['content','tag_id','user_id'];
+
+
+    public function getTagName()//追記
+    {
+      return optional($this->tag)->content;
+    
+    }
+    public function tag()//追記
+    {
+      return $this->belongsTo('App\Models\Tag');
+    
+    }
+
 }
