@@ -44,13 +44,13 @@ class TodoController extends Controller
         $form = $request->all();
         unset($form['_token']);
         Todo::find($request->id)->update($form);
-        return redirect('/home');
+        return back();
     }
 
     public function delete(Request $request)
     {
         Todo::find($request->id)->delete();
-        return redirect('/home');
+        return back();
     }
 
     public function search()
