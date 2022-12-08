@@ -14,7 +14,7 @@ class Todo extends Model
 
     public function tag()//追記
     {
-      return $this->belongsTo('App\Models\Tag');
+        return $this->belongsTo('App\Models\Tag');
     
     }
 

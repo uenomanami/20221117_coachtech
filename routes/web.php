@@ -15,6 +15,7 @@ use App\Http\Controllers\SessionController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/logout', [TodoController::class, 'logout']);
 
 Route::get('/home', [TodoController::class, 'index']);
 Route::post('/add', [TodoController::class, 'add'])->name('todo.add');

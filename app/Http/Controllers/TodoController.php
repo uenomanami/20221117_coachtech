@@ -10,12 +10,19 @@ use App\Models\Tag;
 
 class TodoController extends Controller
 {
+
+    protected function logout() {
+        Auth::logout();
+        return redirect('login');
+    }
+
     public function index()
     {
         $user = Auth::user();
-        $todos = Todo::all();
+        $todos = Todo::where('user_id', $user->id)->get();
         $tags = Tag::all();
-        $param = ['todos' => $todos, 'user' => $user, 'tags' => $tags];
+        $param = ['todos' => $todos, 'user' => $user, 'tags' => $tags];;
+        // return $user->id;
         return view('index', $param);
     }
 
@@ -57,26 +64,26 @@ class TodoController extends Controller
 
     public function find(Request $request)
     {
-        $request_content = $request->input('content');
-        $request_tag = $request->input('tag_id');
-
-        $query = Todo::query();
-        //テーブル結合
-        $query->join('tags', function ($query) use ($request) {
-            $query->on('todos.tag_id', '=', 'tags.id');
-            });
-
-        if(!empty($request_content)) {
-            $query->where('content', 'LIKE', "%{$request_content}%");
-        }
-        if(!empty($request_tag)) {
-            $query->where('tag_id', 'LIKE', $request_tag);
-        }
-
-        $todos = $query->get();
 
         $user = Auth::user();
         $tags = Tag::all();
+
+        $content = $request->input('content');
+        $tag_id = $request->input('tag_id');
+
+        $query = Todo::query();
+        //テーブル結合
+
+        if(!empty($content)) {
+            $query->where('content', 'LIKE', '%'.$content.'%')
+            ->where('user_id', $user->id);
+        }
+        if(!empty($tag_id)) {
+            $query->where('tag_id', $tag_id)
+            ->where('user_id', $user->id);
+        }
+
+        $todos = $query->get();
 
         return view('search', compact('todos',  'user', 'tags'));
     }
